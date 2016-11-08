@@ -1,4 +1,5 @@
 from binascii import hexlify
+import configparser
 import json
 import os
 import shutil
@@ -8,8 +9,10 @@ from uuid import uuid1
 
 from git import Repo
 
+config = configparser.ConfigParser()
+config.read('ltm.ini')
 
-outpath = 'test'
+outpath = config['default']['outpath']
 if os.path.exists(outpath):
     i = 0
     while os.path.exists(outpath + '.' + str(i)):
@@ -18,7 +21,7 @@ if os.path.exists(outpath):
 
 
 runinfo_file = os.path.join(outpath, 'runinfo.json')
-repo_path = '/home/jgosmann/.myrepo'
+repo_path = config['git']['repo_path']
 
 origin_repo = Repo('.')
 try:
