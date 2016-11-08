@@ -63,18 +63,14 @@ def main():
     repo.create_tag(tag)
 
 
-    result = subprocess.run(
-        sys.argv[1:], stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-        universal_newlines=True)
+    result = subprocess.call(sys.argv[1:])
     if not os.path.exists(outpath):
         os.makedirs(outpath)
     with open(runinfo_file, 'w') as f:
         json.dump({
             'cmd': {
-                'args': result.args,
-                'returncode': result.returncode,
-                'stdout': result.stdout,
-                'stderr': result.stderr,
+                'args': sys.argv[1:],
+                'returncode': result,
             },
             'git': {
                 'path': repo_path,
