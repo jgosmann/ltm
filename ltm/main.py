@@ -9,7 +9,15 @@ from uuid import uuid1
 from git import Repo
 
 
-runinfo_file = 'runinfo.json'
+outpath = 'test'
+if os.path.exists(outpath):
+    i = 0
+    while os.path.exists(outpath + '.' + str(i)):
+        i += 1
+    shutil.move(outpath, outpath + '.' + str(i))
+
+
+runinfo_file = os.path.join(outpath, 'runinfo.json')
 repo_path = '/home/jgosmann/.myrepo'
 
 origin_repo = Repo('.')
@@ -54,6 +62,8 @@ repo.create_tag(tag)
 result = subprocess.run(
     sys.argv[1:], stdout=subprocess.PIPE, stderr=subprocess.PIPE,
     universal_newlines=True)
+if not os.path.exists(outpath):
+    os.makedirs(outpath)
 with open(runinfo_file, 'w') as f:
     json.dump({
         'cmd': {
